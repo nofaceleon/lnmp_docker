@@ -14,10 +14,15 @@ then
 	NGINX_PORTS='80'
 	WWW_PATH="$(pwd)/www"
 	PHP_FPM_PATH="$(pwd)/php/php-fpm.d"
+	PHP_CONFIG_PATH="$(pwd)/php/php-ini.d"
+	REDIS_CONFIG_PATH="$(pwd)/redis"
+	REDIS_PORTS='6379'
 
 	NGINX_CONFIG_PATH=${NGINX_CONFIG_PATH//\//\\\/}
 	WWW_PATH=${WWW_PATH//\//\\\/}
 	PHP_FPM_PATH=${PHP_FPM_PATH//\//\\\/}
+	REDIS_CONFIG_PATH=${REDIS_CONFIG_PATH//\//\\\/}
+	PHP_CONFIG_PATH=${PHP_CONFIG_PATH//\//\\\/}
 
 	# echo "s/NGINX_CONFIG_PATH/${NGINX_CONFIG_PATH}/g"
 	# echo "s/NGINX_PORTS/${NGINX_PORTS}/g"
@@ -48,6 +53,9 @@ then
 	sed -i "s/NGINX_PORTS/${NGINX_PORTS}/g" docker-compose.yml
 	sed -i "s/WWW_PATH/${WWW_PATH}/g" docker-compose.yml
 	sed -i "s/PHP_FPM_PATH/${PHP_FPM_PATH}/g" docker-compose.yml
+	sed -i "s/REDIS_CONFIG_PATH/${REDIS_CONFIG_PATH}/g" docker-compose.yml
+	sed -i "s/REDIS_PORTS/${REDIS_PORTS}/g" docker-compose.yml
+	sed -i "s/PHP_CONFIG_PATH/${PHP_CONFIG_PATH}/g" docker-compose.yml
 
 
 	#启动docker服务

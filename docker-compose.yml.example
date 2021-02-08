@@ -7,8 +7,8 @@ services:
     depends_on: 
       - phpfpm
     volumes:
-      - NGINX_CONFIG_PATH:/etc/nginx/
-      - WWW_PATH:/usr/share/nginx/www/
+      - NGINX_CONFIG_PATH:/etc/nginx
+      - WWW_PATH:/var/www/html
     ports:
       - "NGINX_PORTS:80"
     networks:
@@ -18,10 +18,23 @@ services:
     image: php:7.4-fpm
     privileged: true
     volumes:
-      - WWW_PATH:/usr/share/nginx/www/ #这边的文件挂载目录必须要和nginx中的配种是一样的
+      - WWW_PATH:/var/www/html #这边的文件挂载目录必须要和nginx中的配种是一样的
       - PHP_FPM_PATH:/usr/local/etc/php-fpm.d
+      - PHP_CONFIG_PATH:/usr/local/etc/php
     networks:
       - sjsphpenv #代表当前服务用的是哪个桥
+  redis: 
+    container_name: redis01
+    image: redis:latest
+    privileged: true
+    ports: 
+      - "REDIS_PORTS:6379"
+    volumes: 
+      - REDIS_CONFIG_PATH:/usr/local/etc/redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    networks: 
+      - sjsphpenv
+
 
 networks:
   sjsphpenv: #定义上面的服务用到的桥,同一个网桥下面的不同容器之间能够通信
