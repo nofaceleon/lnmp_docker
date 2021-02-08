@@ -1,0 +1,25 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx01
+    image: nginx:latest
+    privileged: true
+    volumes:
+      - NGINX_CONFIG_PATH:/etc/nginx/
+      - WWW_PATH:/usr/share/nginx/www/
+    ports:
+      - "NGINX_PORTS:80"
+    networks:
+      - sjsphpenv #代表当前服务用的是哪个桥
+  phpfpm:
+    container_name: phpfpm01
+    image: php:7.4-fpm
+    privileged: true
+    volumes:
+      - WWW_PATH:/usr/share/nginx/www/ #这边的文件挂载目录必须要和nginx中的配种是一样的
+      - PHP_FPM_PATH:/usr/local/etc/php-fpm.d
+    networks:
+      - sjsphpenv #代表当前服务用的是哪个桥
+
+networks:
+  sjsphpenv: #定义上面的服务用到的桥,同一个网桥下面的不同容器之间能够通信
