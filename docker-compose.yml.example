@@ -4,6 +4,8 @@ services:
     container_name: nginx01
     image: nginx:latest
     privileged: true
+    depends_on: 
+      - phpfpm
     volumes:
       - NGINX_CONFIG_PATH:/etc/nginx/
       - WWW_PATH:/usr/share/nginx/www/
