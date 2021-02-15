@@ -34,7 +34,20 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf
     networks: 
       - sjsphpenv
-
+  mysql: 
+    container_name: mysql01
+    image: mysql:5.7.33
+    privileged: true
+    ports: 
+      - "MYSQL_PORTS:3306"
+    environment: 
+      - "MYSQL_ROOT_PASSWORD=MYSQL_ROOT_PWD"
+      - "TZ=Asia/Shanghai"
+    volumes: 
+      - MYSQL_CONFIG:/etc/mysql
+      #- MYSQL_DATA:/var/lib/mysql
+    networks:
+      - sjsphpenv  
 
 networks:
   sjsphpenv: #定义上面的服务用到的桥,同一个网桥下面的不同容器之间能够通信

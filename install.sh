@@ -8,21 +8,29 @@ then
 	if [ ! -f ./docker-compose.yml.example ]; then
 		echo '缺失docker-compose.yml.example文件'
 		exit
-	fi	
+	fi
 
-	NGINX_CONFIG_PATH="$(pwd)/nginx"
-	NGINX_PORTS='80'
-	WWW_PATH="$(pwd)/www"
-	PHP_FPM_PATH="$(pwd)/php/php-fpm.d"
-	PHP_CONFIG_PATH="$(pwd)/php/php-ini.d"
-	REDIS_CONFIG_PATH="$(pwd)/redis"
-	REDIS_PORTS='6379'
+	# NGINX_CONFIG_PATH="$(pwd)/nginx"
+	# NGINX_PORTS='80'
+	# WWW_PATH="$(pwd)/www"
 
-	NGINX_CONFIG_PATH=${NGINX_CONFIG_PATH//\//\\\/}
-	WWW_PATH=${WWW_PATH//\//\\\/}
-	PHP_FPM_PATH=${PHP_FPM_PATH//\//\\\/}
-	REDIS_CONFIG_PATH=${REDIS_CONFIG_PATH//\//\\\/}
-	PHP_CONFIG_PATH=${PHP_CONFIG_PATH//\//\\\/}
+	# PHP_FPM_PATH="$(pwd)/php/php-fpm.d"
+	# PHP_CONFIG_PATH="$(pwd)/php/php-ini.d"
+
+	# REDIS_CONFIG_PATH="$(pwd)/redis"
+	# REDIS_PORTS='6379'
+
+	# MYSQL_PORTS='3306'
+	# #MYSQL_DATA="$(pwd)/mysql/data"
+	# MYSQL_CONFIG="$(pwd)/mysql/conf"
+	# MYSQL_ROOT_PWD='132456'
+
+	# NGINX_CONFIG_PATH=${NGINX_CONFIG_PATH//\//\\\/}
+	# WWW_PATH=${WWW_PATH//\//\\\/}
+	# PHP_FPM_PATH=${PHP_FPM_PATH//\//\\\/}
+	# REDIS_CONFIG_PATH=${REDIS_CONFIG_PATH//\//\\\/}
+	# PHP_CONFIG_PATH=${PHP_CONFIG_PATH//\//\\\/}
+	# MYSQL_CONFIG=${MYSQL_CONFIG//\//\\\/}
 
 	# echo "s/NGINX_CONFIG_PATH/${NGINX_CONFIG_PATH}/g"
 	# echo "s/NGINX_PORTS/${NGINX_PORTS}/g"
@@ -46,16 +54,38 @@ then
 	fi
 
 
-
 	#修改文件
 	cp ./docker-compose.yml.example ./docker-compose.yml
-	sed -i "s/NGINX_CONFIG_PATH/${NGINX_CONFIG_PATH}/g" docker-compose.yml
-	sed -i "s/NGINX_PORTS/${NGINX_PORTS}/g" docker-compose.yml
-	sed -i "s/WWW_PATH/${WWW_PATH}/g" docker-compose.yml
-	sed -i "s/PHP_FPM_PATH/${PHP_FPM_PATH}/g" docker-compose.yml
-	sed -i "s/REDIS_CONFIG_PATH/${REDIS_CONFIG_PATH}/g" docker-compose.yml
-	sed -i "s/REDIS_PORTS/${REDIS_PORTS}/g" docker-compose.yml
-	sed -i "s/PHP_CONFIG_PATH/${PHP_CONFIG_PATH}/g" docker-compose.yml
+
+	declare -A configs
+
+	configs['NGINX_CONFIG_PATH']="$(pwd)/nginx"
+	configs['NGINX_PORTS']='80'
+	configs['WWW_PATH']="$(pwd)/www"
+
+	configs['PHP_FPM_PATH']="$(pwd)/php/php-fpm.d"
+	configs['PHP_CONFIG_PATH']="$(pwd)/php/php-ini.d"
+    
+    configs['REDIS_CONFIG_PATH']="$(pwd)/redis"
+	configs['REDIS_PORTS']='6379'
+
+	configs['MYSQL_PORTS']='3306'
+	configs['MYSQL_DATA']="$(pwd)/mysql/data"
+	configs['MYSQL_CONFIG']="$(pwd)/mysql/conf"
+	configs['MYSQL_ROOT_PWD']='132456'
+
+	for key in ${!configs[*]}; do
+		TMP=${configs[$key]//\//\\\/}
+		sed -i "s/${key}/${TMP}/g" docker-compose.yml
+	done
+
+	# sed -i "s/NGINX_CONFIG_PATH/${NGINX_CONFIG_PATH}/g" docker-compose.yml
+	# sed -i "s/NGINX_PORTS/${NGINX_PORTS}/g" docker-compose.yml
+	# sed -i "s/WWW_PATH/${WWW_PATH}/g" docker-compose.yml
+	# sed -i "s/PHP_FPM_PATH/${PHP_FPM_PATH}/g" docker-compose.yml
+	# sed -i "s/REDIS_CONFIG_PATH/${REDIS_CONFIG_PATH}/g" docker-compose.yml
+	# sed -i "s/REDIS_PORTS/${REDIS_PORTS}/g" docker-compose.yml
+	# sed -i "s/PHP_CONFIG_PATH/${PHP_CONFIG_PATH}/g" docker-compose.yml
 
 
 	#启动docker服务
@@ -68,6 +98,4 @@ then
 else
 	echo '请先删除本地的dokcer-compose.yml文件'
 fi
-
-
 
